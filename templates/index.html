@@ -1,0 +1,309 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Todo - NOTES</title>
+
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+
+    <link
+      href="https://kit-pro.fontawesome.com/releases/v5.15.1/css/pro.min.css"
+      rel="stylesheet"
+    />
+    <!-- Tailwind CSS  -->
+    <link
+      href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <style>
+    #hoverItem:hover {
+      transition: 0.2s all ease-in-out;
+      transform: scale(1.005);
+    }
+  </style>
+  <body class="bg-gray-600">
+    <nav
+      class="
+        font-sans
+        flex flex-col
+        text-center
+        sm:flex-row sm:text-left sm:justify-between
+        py-4
+        px-6
+        bg-gray-800
+        shadow
+        sm:items-baseline
+        w-full
+      "
+    >
+      <div class="mb-2 sm:mb-0">
+        <a
+          href="/home"
+          class="
+            text-2xl
+            no-underline
+            text-gray-300
+            font-bold
+            hover:text-purple-500
+            transition
+            duration-200
+          "
+          >Todo App</a
+        >
+      </div>
+      <div class="p-2">
+        <a
+          href="/one"
+          class="
+            text-lg
+            no-underline
+            text-gray-200
+            ml-2
+            hover:text-purple-400
+            transition
+            duration-200
+          "
+          >Code</a
+        >
+        <a
+          href="/two"
+          class="
+            text-lg
+            no-underline
+            text-gray-200
+            ml-2
+            hover:text-purple-400
+            transition
+            duration-200
+          "
+          >Portfolio</a
+        >
+        <a
+          href="/three"
+          class="
+            text-lg
+            no-underline
+            text-gray-200
+            ml-2
+            hover:text-purple-400
+            transition
+            duration-200
+          "
+          >Twitter</a
+        >
+      </div>
+    </nav>
+    <div class="container p-4 md:p-10 mx-auto">
+      <div>
+        <form method="POST" action="{{url_for('add')}}">
+          <div class="grid grid-cols-2 gap-3 md:grid-cols-2">
+            <div>
+              <div>
+                <input
+                  class="
+                    bg-gray-200
+                    appearance-none
+                    border-2 border-gray-200
+                    rounded
+                    w-full
+                    py-2
+                    px-4
+                    text-gray-700
+                    leading-tight
+                    focus:outline-none focus:bg-white focus:border-purple-500
+                  "
+                  id="inline-full-name"
+                  type="text"
+                  placeholder="Learn Flask"
+                  required
+                  name="todoitem"
+                />
+              </div>
+            </div>
+            <!-- ... -->
+            <div>
+              <button
+                class="
+                  bg-transparent
+                  hover:bg-purple-500
+                  text-white
+                  font-semibold
+                  hover:text-white
+                  py-2
+                  px-4
+                  border border-white
+                  hover:border-transparent
+                  rounded
+                  w-full
+                "
+                type="submit"
+              >
+                <i class="fas fa-plus"></i> Add Item
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <!-- card design -->
+      <div class="bg-gray-700 p-6 rounded-lg shadow-lg">
+        <h3 class="font-bold text-gray-300 text-2xl">Your Todo List</h3>
+
+        <div class="flex pt-2">
+          <div class="shadow-xl w-full bg-gray-400 rounded-lg">
+            {% for todo in incompleteTodos %}
+            <a href="{{url_for('complete', id=todo.id)}}">
+              <ul class="">
+                <li
+                  class="
+                    transition
+                    duration-200
+                    p-4
+                    hover:bg-gray-500
+                    text-gray-900
+                    hover:text-purple-100
+                    rounded-sm
+                    hover:shadow-md
+                    cursor-pointer
+                  "
+                >
+                  {{todo.text}}
+                  <a href="{{url_for('remove', id=todo.id)}}">
+                    <button class="pull-right">
+                      <span
+                        class="
+                          fas
+                          fa-trash
+                          text-gray-700
+                          hover:text-red-400
+                          rounded-lg
+                          p-1
+                        "
+                      ></span>
+                    </button>
+                  </a>
+                  <a href="{{url_for('urgent', id=todo.id)}}">
+                    <button class="pull-right">
+                      <span
+                        class="
+                          text-yellow-300
+                          hover:text-yellow-500
+                          rounded-lg
+                          p-1
+                          fas
+                          fa-bookmark
+                        "
+                      >
+                      </span>
+                    </button>
+                  </a>
+                </li>
+              </ul>
+            </a>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+
+      <!-- urgent list -->
+      <div class="bg-gray-700 p-6 rounded-lg shadow-lg mt-10">
+        <h3 class="font-bold text-gray-300 text-2xl">
+          Urgently Need Finishing
+        </h3>
+
+        <div class="flex pt-2">
+          <div class="shadow-xl w-full bg-gray-300 rounded-lg">
+            {% for todo in urgent %}
+            <a href="{{url_for('complete', id=todo.id)}}">
+              <ul>
+                <li
+                  class="
+                    transition
+                    duration-200
+                    hover:text-purple-100
+                    p-4
+                    hover:bg-gray-500
+                    text-gray-800
+                    rounded-sm
+                    hover:shadow-md
+                    cursor-pointer
+                    shadow-sm
+                  "
+                >
+                  {{todo.text}}
+                  <a href="{{url_for('remove', id=todo.id)}}">
+                    <button class="pull-right">
+                      <span
+                        class="
+                          fas
+                          fa-trash
+                          text-gray-700
+                          hover:text-red-400
+                          rounded-lg
+                          p-1
+                        "
+                      ></span>
+                    </button>
+                  </a>
+                </li>
+              </ul>
+            </a>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+
+      <!-- completed card -->
+      <div class="bg-gray-700 p-6 rounded-lg shadow-lg mt-10">
+        <h3 class="font-bold text-gray-300 text-2xl">Completed List</h3>
+
+        <div class="flex pt-2">
+          <div class="shadow-xl w-full bg-gray-400 rounded-lg">
+            {% for todo in complete %}
+            <a href="{{url_for('incomplete', id=todo.id)}}">
+              <ul>
+                <li
+                  class="
+                    transition
+                    duration-200
+                    hover:text-purple-100
+                    p-4
+                    hover:bg-gray-500
+                    text-gray-800
+                    rounded-sm
+                    hover:shadow-md
+                    cursor-pointer
+                    line-through
+                    shadow-sm
+                  "
+                >
+                  {{todo.text}}
+                  <a href="{{url_for('remove', id=todo.id)}}">
+                    <button class="pull-right">
+                      <span
+                        class="
+                          fas
+                          fa-trash
+                          text-gray-700
+                          hover:text-red-400
+                          rounded-lg
+                          p-1
+                        "
+                      ></span>
+                    </button>
+                  </a>
+                </li>
+              </ul>
+            </a>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
